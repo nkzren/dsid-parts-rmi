@@ -1,2 +1,4 @@
-public interface Part {
+import java.rmi.Remote;
+
+public interface Part extends Remote {
 }
