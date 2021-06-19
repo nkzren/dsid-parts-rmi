@@ -5,9 +5,7 @@ import stubs.PartRepository;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class PartRepositoryImpl extends UnicastRemoteObject implements PartRepository {
 
@@ -19,14 +17,23 @@ public class PartRepositoryImpl extends UnicastRemoteObject implements PartRepos
         return partList;
     }
 
+    public PartRepositoryImpl() throws RemoteException {
+        super();
+
+        this.partList = new ArrayList<>();
+        this.partMap = new HashMap<>();
+    }
+
     @Override
     public void addPart(Part part) throws RemoteException {
+        System.out.println("nova part:" + part.toString());
         partList.add(part);
         partMap.put(part.getId(), part);
     }
 
     @Override
     public void addPart(String name, String description) throws RemoteException {
+        System.out.println(name + description);
         Part part = new PartsResource(name, description);
         addPart(part);
     }
@@ -36,9 +43,6 @@ public class PartRepositoryImpl extends UnicastRemoteObject implements PartRepos
         return partMap.get(partId);
     }
 
-    public PartRepositoryImpl() throws RemoteException {
-        super();
-    }
 
     public String besta() throws RemoteException {
         return "metodo besta";

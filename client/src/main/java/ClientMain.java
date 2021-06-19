@@ -17,9 +17,9 @@ public class ClientMain {
             System.out.println("Conectado ao servidor Main. Digite uma das opcoes abaixo:");
             System.out.println("[a]dicionar part | [p]rocurar part | [q]uit");
             String input = sc.nextLine();
-            while ("quit".equalsIgnoreCase(input)) {
+            while (!"quit".equalsIgnoreCase(input)) {
 
-                if (input == "a") {
+                if (input.equals("a")) {
                     controller.newPartCommand();
                 }
                 input = sc.nextLine();

@@ -52,4 +52,12 @@ public class PartsResource implements Part {
         Part part = new PartsResource(name, description);
         addSubcomponents(part);
     }
+
+    @Override
+    public String toString() {
+        return "PartsResource{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
