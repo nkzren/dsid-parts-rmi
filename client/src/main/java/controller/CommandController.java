@@ -1,8 +1,10 @@
 package controller;
 
+import stubs.Part;
 import stubs.PartRepository;
 
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Scanner;
 
 public class CommandController {
@@ -15,7 +17,7 @@ public class CommandController {
         this.repository = repository;
     }
 
-    public void newPartCommand() {
+    public void newPartCommand() throws RemoteException {
         System.out.println("Digite o nome da part:");
         String name = sc.nextLine();
 
@@ -27,13 +29,19 @@ public class CommandController {
                 throw new IllegalArgumentException();
             }
             this.repository.addPart(name, description);
-        } catch (RemoteException e) {
-            System.out.println("Erro ao adicionar a peca:");
-            e.printStackTrace();
         } catch (IllegalArgumentException e) {
             System.out.println("O nome e a descricao nao podem ser vazios");
             e.printStackTrace();
         }
+    }
+
+    public List<Part> listParts() throws RemoteException {
+        System.out.println("Listando partes...");
+        return repository.getPartList();
+    }
+
+    public Part findPart() {
+        return null;
     }
 
 }

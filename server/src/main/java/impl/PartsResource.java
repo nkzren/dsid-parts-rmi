@@ -2,10 +2,11 @@ package impl;
 
 import stubs.Part;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.*;
 
-public class PartsResource implements Part {
+public class PartsResource implements Part, Serializable {
 
     private final UUID id;
     private String name;
