@@ -2,6 +2,7 @@ package impl;
 
 import stubs.Part;
 
+import java.rmi.RemoteException;
 import java.util.*;
 
 public class PartsResource implements Part {
@@ -21,32 +22,32 @@ public class PartsResource implements Part {
     }
 
     @Override
-    public UUID getId() {
+    public UUID getId() throws RemoteException {
         return id;
     }
 
     @Override
-    public String getName() {
+    public String getName() throws RemoteException {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public String getDescription() throws RemoteException {
         return description;
     }
 
     @Override
-    public Map<UUID, Integer> getSubcomponents() {
+    public Map<UUID, Integer> getSubcomponents() throws RemoteException {
 
         return subcomponents;
     }
 
-    public void addSubcomponents(Part part) {
+    public void addSubcomponents(Part part) throws RemoteException {
 
         subcomponents.put(part.getId(), subcomponents.getOrDefault(subcomponents.get(part), 0) + 1);
     }
 
-    public void addSubcomponents(String name, String description) {
+    public void addSubcomponents(String name, String description) throws RemoteException {
 
         Part part = new PartsResource(name, description);
         addSubcomponents(part);

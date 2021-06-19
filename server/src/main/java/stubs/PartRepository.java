@@ -7,8 +7,8 @@ import java.util.UUID;
 
 public interface PartRepository extends Remote {
 
-    List<Part> getPartList();
-    void addPart(Part part);
-    void addPart(String name, String description);
-    Part getPart(UUID partId);
+    List<Part> getPartList() throws RemoteException;
+    void addPart(Part part) throws RemoteException;
+    void addPart(String name, String description) throws RemoteException;
+    Part getPart(UUID partId) throws RemoteException;
 }

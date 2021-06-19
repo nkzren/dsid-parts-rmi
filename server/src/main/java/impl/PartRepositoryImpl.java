@@ -15,24 +15,24 @@ public class PartRepositoryImpl extends UnicastRemoteObject implements PartRepos
     List<Part> partList;
 
     @Override
-    public List<Part> getPartList(){
+    public List<Part> getPartList() throws RemoteException{
         return partList;
     }
 
     @Override
-    public void addPart(Part part) {
+    public void addPart(Part part) throws RemoteException {
         partList.add(part);
         partMap.put(part.getId(), part);
     }
 
     @Override
-    public void addPart(String name, String description) {
+    public void addPart(String name, String description) throws RemoteException {
         Part part = new PartsResource(name, description);
         addPart(part);
     }
 
     @Override
-    public Part getPart(UUID partId) {
+    public Part getPart(UUID partId) throws RemoteException {
         return partMap.get(partId);
     }
 
