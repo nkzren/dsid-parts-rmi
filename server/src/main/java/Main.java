@@ -8,14 +8,12 @@ public class Main {
     private static Registry registry;
 
     public static void main (String args [ ]) {
-        //Cria e instacd la o security manager
-        //System.setSecurityManager(new RMISecurityManager() );
         try {
-            //Cria HelloImpl
-            LocateRegistry.createRegistry(10020);
-            registry = LocateRegistry.getRegistry(10020);
+            int port = Integer.parseInt(args[1]); // 10020
+            LocateRegistry.createRegistry(port);
+            registry = LocateRegistry.getRegistry(port);
             PartRepository obj = new PartRepositoryImpl();
-            registry.bind("Main", obj);
+            registry.bind(args[0], obj);
             System.out.println("Server pronto.");
 
         } catch(Exception e) {

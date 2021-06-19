@@ -59,6 +59,7 @@ public class PartsResource implements Part, Serializable {
         return "PartsResource{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", id=" + id +
                 '}';
     }
 }

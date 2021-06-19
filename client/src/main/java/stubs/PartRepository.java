@@ -9,6 +9,6 @@ public interface PartRepository extends Remote {
 
     List<Part> getPartList() throws RemoteException;
     void addPart(Part part) throws RemoteException;
-    void addPart(String name, String description) throws RemoteException;
+    Part addPart(String name, String description) throws RemoteException;
     Part getPart(UUID partId) throws RemoteException;
 }
