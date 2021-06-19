@@ -43,8 +43,4 @@ public class PartRepositoryImpl extends UnicastRemoteObject implements PartRepos
         return partMap.get(partId);
     }
 
-
-    public String besta() throws RemoteException {
-        return "metodo besta";
-    }
 }
