@@ -23,9 +23,15 @@ public class CommandController {
         String description = sc.nextLine();
 
         try {
+            if (name.isEmpty() || description.isEmpty()) {
+                throw new IllegalArgumentException();
+            }
             this.repository.addPart(name, description);
         } catch (RemoteException e) {
             System.out.println("Erro ao adicionar a peca:");
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            System.out.println("O nome e a descricao nao podem ser vazios");
             e.printStackTrace();
         }
     }
