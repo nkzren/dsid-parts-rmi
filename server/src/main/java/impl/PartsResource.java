@@ -45,13 +45,18 @@ public class PartsResource implements Part, Serializable {
 
     public void addSubcomponents(Part part) throws RemoteException {
 
-        subcomponents.put(part.getId(), subcomponents.getOrDefault(subcomponents.get(part), 0) + 1);
+        addSubcomponents(part, 1);
     }
 
     public void addSubcomponents(String name, String description) throws RemoteException {
 
         Part part = new PartsResource(name, description);
         addSubcomponents(part);
+    }
+
+    public void addSubcomponents(Part part, int quant) throws RemoteException {
+
+        subcomponents.put(part.getId(), subcomponents.getOrDefault(part.getId(), 0) + quant);
     }
 
     @Override

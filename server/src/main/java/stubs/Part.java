@@ -13,4 +13,5 @@ public interface Part extends Remote {
     Map<UUID, Integer> getSubcomponents() throws RemoteException;
     void addSubcomponents(Part part) throws RemoteException;
     void addSubcomponents(String name, String description) throws RemoteException;
+    public void addSubcomponents(Part part, int quant) throws RemoteException;
 }

@@ -26,70 +26,81 @@ public class ClientMain {
 
             CommandController controller = new CommandController(sc, serverName.toString());
 
-            String options = "[a]dicionar part | [l]istar parts | [p]rocurar part | [i]nserir subpart | [t]rocar de servidor | [q]uit";
+            String options = "bind | listp | getp | showp | clearlist | addsubpart | addp | quit";
 
             System.out.println("Conectado ao servidor " + inputName + ". Digite uma das opcoes abaixo:");
             System.out.println(options);
             String input = sc.nextLine();
 
-            while (!input.startsWith("q")) {
+            while (!input.startsWith("quit")) {
 
-                if (input.startsWith("a")) {
-                    controller.newPartCommand();
-                }
+                switch (input) {
+                    case "addp":
+                        controller.newPartCommand();
+                        break;
 
-                else if (input.startsWith("l")) {
-                    List<Part> parts = controller.listParts();
-                    StringBuilder sb = new StringBuilder("");
-                    for (Part part : parts) {
-                        sb.append(part.toString()).append("\n");
-                    }
-                    System.out.println(sb);
-                }
+                    case "listp":
+                        List<Part> parts = controller.listParts();
+                        StringBuilder sb = new StringBuilder("");
+                        for (Part part : parts) {
+                            sb.append(part.toString()).append("\n");
+                        }
+                        System.out.println(sb);
+                        break;
 
-                else if (input.startsWith("p")) {
-                    System.out.print("Insira o id que deseja buscar: ");
-                    UUID searchId = UUID.fromString(sc.nextLine());
-                    Part part = controller.findPart(searchId);
-                    if(part == null) {
-                        System.out.println("Part inexistente");
-                    }
+                    case "getp":
+                        System.out.print("Insira o id que deseja buscar: ");
+                        UUID searchId = UUID.fromString(sc.nextLine());
+                        Part part = controller.findPart(searchId);
+                        if (part == null) {
+                            System.out.println("Part inexistente");
+                        }
+                        else {
+                            System.out.println("Part encontrada: " + part);
+                        }
+                        break;
 
-                    else {
-                        System.out.println("Part encontrada: " + part);
-                    }
-                }
+                    case "addsubpart":
 
-                else if (input.startsWith("i")){
-                    List<Part> parts = controller.listParts();
-                    StringBuilder sb = new StringBuilder("");
+//                        parts = controller.listParts();
+//                        sb = new StringBuilder("");
+//
+//                        for (Part p : parts) {
+//                            sb.append("{Nome='").append(p.getName()).append("', id=").append(p.getId()).append("}\n");
+//                        }
+//                        System.out.println(sb);
 
-                    for(Part part : parts){
-                        sb.append("{Nome='").append(part.getName()).append("', id=").append(part.getId()).append("}\n");
-                    }
-                    System.out.println(sb);
+                        //System.out.println("Insira o id da part que deseja receber uma subpart: ");
+                        //UUID partId = UUID.fromString(sc.nextLine());
 
-                    System.out.println("Insira o id da part que deseja receber uma subpart: ");
-                    UUID partId = UUID.fromString(sc.nextLine());
+                        System.out.println("Digite a quantidade de unidades da peca corrente: ");
+                        int quant = Integer.parseInt(sc.nextLine());
 
-                    controller.addSubpartCommand(partId);
-                }
+                        controller.addSubpartCommand(quant);
+                        break;
 
-                else if (input.startsWith("t")){
+                    case "bind":
 
-                    String tempName = inputName;
-                    String tempPort = inputPort;
+                        String tempName = inputName;
+                        String tempPort = inputPort;
 
-                    System.out.println("Digite o nome do novo servidor: ");
-                    inputName = sc.nextLine();
+                        System.out.println("Digite o nome do novo servidor: ");
+                        inputName = sc.nextLine();
 
-                    System.out.println("Digite a porta do novo servidor: ");
-                    inputPort = sc.nextLine();
+                        System.out.println("Digite a porta do novo servidor: ");
+                        inputPort = sc.nextLine();
 
-                    serverName.delete(serverName.length() - tempName.length() - tempPort.length() - 1, serverName.length());
-                    serverName.append(inputPort).append("/").append(inputName);
+                        serverName.delete(serverName.length() - tempName.length() - tempPort.length() - 1, serverName.length());
+                        serverName.append(inputPort).append("/").append(inputName);
 
-                    controller.changeServer(serverName.toString());
+                        controller.changeServer(serverName.toString());
+                        break;
+
+                    case "showp":
+                        System.out.println(controller.getCurrentPart());
+
+                    case "clearlist":
+                        controller.clearListCommand();
                 }
 
                 System.out.println(options);
