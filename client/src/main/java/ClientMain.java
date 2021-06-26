@@ -70,7 +70,6 @@ public class ClientMain {
                         controller.addSubpartCommand(quant);
                         if (controller.getCurrentPart().isPresent()) {
                             UUID currentPartId = controller.getCurrentPart().get().getId();
-                            System.out.println(controller.getCurrentSubParts().get(currentPartId));
                         }
                         break;
 

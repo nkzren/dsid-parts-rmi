@@ -59,7 +59,6 @@ public class PartsResource implements Part, Serializable {
     @Override
     public void addSubcomponents(Part part, int quant) throws RemoteException {
 
-        System.out.println("T A P I O C A");
         subcomponents.put(part.getId(), subcomponents.getOrDefault(part.getId(), 0) + quant);
     }
 
