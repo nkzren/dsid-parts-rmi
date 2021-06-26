@@ -40,7 +40,10 @@ public class CommandController {
             System.out.println("id=" + newPart.getId());
 
             for (UUID partId : currentSubParts.keySet()) {
-                repository.addSubpart(newPart, findPart(partId), currentSubParts.get(partId));
+                Optional<Part> optionalPart = findPart(partId);
+                if (optionalPart.isPresent()) {
+                    repository.addSubpart(newPart, optionalPart.get(), currentSubParts.get(partId));
+                }
             }
 
             if(this.currentPart == null) {
@@ -87,8 +90,6 @@ public class CommandController {
     }
 
     public Optional<Part> findPart(UUID partId) {
-
-
         try {
             return Optional.of(repository.getPart(partId));
         } catch (RemoteException e) {

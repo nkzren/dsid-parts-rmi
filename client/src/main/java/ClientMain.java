@@ -1,9 +1,5 @@
 import controller.CommandController;
 import stubs.Part;
-import stubs.PartRepository;
-
-import java.rmi.Naming;
-import java.rmi.RMISecurityManager;
 import java.util.*;
 
 public class ClientMain {
@@ -103,8 +99,9 @@ public class ClientMain {
                         System.out.println("Subparts: ");
 
                         if (optionalCurrentPart.isPresent()) {
-                            for(UUID id : optionalCurrentPart.get().getSubcomponents().keySet()){
-                                System.out.println(controller.findPart(id) + " quantity=" + optionalCurrentPart.getSubcomponents().get(id));
+                            Map<UUID, Integer> subcomponents = optionalCurrentPart.get().getSubcomponents();
+                            for(UUID id : subcomponents.keySet()){
+                                System.out.println(controller.findPart(id) + " quantity=" + subcomponents.get(id));
                             }
                         } else {
                             System.out.println("Part nao encontrada");
