@@ -57,6 +57,7 @@ public class ClientMain {
                             if (part == null) {
                                 System.out.println("Part inexistente");
                             } else {
+                                controller.setCurrentPart(part);
                                 System.out.println("Part encontrada: " + part);
                             }
                         }
@@ -92,16 +93,15 @@ public class ClientMain {
                         break;
 
                     case "showp":
-                        System.out.println(controller.getCurrentPart());
+
+                        Part part = controller.getCurrentPart();
+
+                        System.out.println(part);
                         System.out.println("Subparts: ");
 
-                        System.out.println(controller.getCurrentPart().getSubcomponents().size());
-
-                        for(UUID id : controller.getCurrentPart().getSubcomponents().keySet()){
-                            System.out.println(controller.findPart(id) + " Quantidade=" + controller.getCurrentPart().getSubcomponents().get(id));
+                        for(UUID id : part.getSubcomponents().keySet()){
+                            System.out.println(controller.findPart(id) + " quantity=" + part.getSubcomponents().get(id));
                         }
-
-                        System.out.println(controller.getCurrentPart().getSubcomponents());
 
                         break;
 

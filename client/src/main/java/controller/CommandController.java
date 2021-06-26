@@ -73,12 +73,7 @@ public class CommandController {
 
     public Part findPart(UUID partId) throws RemoteException {
 
-        Part part = repository.getPart(partId);
-
-        if(part != null)
-            this.currentPart = part;
-
-        return part;
+        return repository.getPart(partId);
     }
 
     public void changeServer(String serverName) throws Exception {
@@ -86,9 +81,14 @@ public class CommandController {
         this.repository = (PartRepository) Naming.lookup(serverName);
     }
 
-    public Part getCurrentPart() {
+    public Part getCurrentPart() throws RemoteException {
 
-        return this.currentPart;
+        return findPart(this.currentPart.getId());
+    }
+
+    public void setCurrentPart(Part currentPart) {
+
+        this.currentPart = currentPart;
     }
 
     public Map<UUID, Integer> getCurrentSubParts() {
