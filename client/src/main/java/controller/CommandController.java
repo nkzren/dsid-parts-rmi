@@ -3,9 +3,7 @@ package controller;
 import stubs.Part;
 import stubs.PartRepository;
 
-import java.net.MalformedURLException;
 import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.*;
 
@@ -23,7 +21,7 @@ public class CommandController {
         this.currentSubParts = new HashMap<>();
     }
 
-    public Part newPartCommand() throws RemoteException {
+    public Optional<Part> newPartCommand() {
         System.out.println("Digite o nome da part:");
         String name = sc.nextLine();
 
@@ -45,35 +43,58 @@ public class CommandController {
                 repository.addSubpart(newPart, findPart(partId), currentSubParts.get(partId));
             }
 
-            if(this.currentPart == null)
+            if(this.currentPart == null) {
                 this.currentPart = newPart;
-        }
-        catch (IllegalArgumentException e) {
+            }
+        } catch (IllegalArgumentException e) {
             System.out.println("O nome e a descricao nao podem ser vazios");
             e.printStackTrace();
+        } catch (RemoteException e) {
+            System.out.println("Erro de conexao com o servidor");
+            return Optional.empty();
         }
 
-        return newPart;
+        if (newPart != null) {
+            return Optional.of(newPart);
+        } else {
+            return Optional.empty();
+        }
     }
 
-    public void addSubpartCommand(int quant) throws RemoteException {
+    public void addSubpartCommand(int quant) {
 
         if(this.currentPart == null){
             System.out.println("A peca corrente eh nula");
             return;
         }
 
-        currentSubParts.put(this.currentPart.getId(), currentSubParts.getOrDefault(this.currentPart.getId(), 0) + quant);
+        try {
+            UUID currentId = this.currentPart.getId();
+            currentSubParts.put(currentId, currentSubParts.getOrDefault(currentId, 0) + quant);
+        } catch (RemoteException e) {
+            handleRemoteException(e);
+        }
     }
 
-    public List<Part> listParts() throws RemoteException {
-        System.out.println("Listando partes...");
-        return repository.getPartList();
+    public Optional<List<Part>> listParts() {
+        try {
+            System.out.println("Listando partes...");
+            return Optional.of(repository.getPartList());
+        } catch (RemoteException e) {
+            handleRemoteException(e);
+            return Optional.empty();
+        }
     }
 
-    public Part findPart(UUID partId) throws RemoteException {
+    public Optional<Part> findPart(UUID partId) {
 
-        return repository.getPart(partId);
+
+        try {
+            return Optional.of(repository.getPart(partId));
+        } catch (RemoteException e) {
+            handleRemoteException(e);
+            return Optional.empty();
+        }
     }
 
     public void changeServer(String serverName) throws Exception {
@@ -81,8 +102,7 @@ public class CommandController {
         this.repository = (PartRepository) Naming.lookup(serverName);
     }
 
-    public Part getCurrentPart() throws RemoteException {
-
+    public Optional<Part> getCurrentPart() throws RemoteException {
         return findPart(this.currentPart.getId());
     }
 
@@ -94,6 +114,11 @@ public class CommandController {
     public Map<UUID, Integer> getCurrentSubParts() {
 
         return currentSubParts;
+    }
+
+    public void handleRemoteException(RemoteException e) {
+        System.out.println("Erro de conexao com o servidor");
+        e.printStackTrace();
     }
 
     public void clearListCommand() {

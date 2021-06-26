@@ -4,9 +4,7 @@ import stubs.PartRepository;
 
 import java.rmi.Naming;
 import java.rmi.RMISecurityManager;
-import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 public class ClientMain {
     public static void main(String[] args) {
@@ -40,9 +38,9 @@ public class ClientMain {
                         break;
 
                     case "listp":
-                        List<Part> parts = controller.listParts();
-                        StringBuilder sb = new StringBuilder("");
-                        for (Part part : parts) {
+                        Optional<List<Part>> optionalParts = controller.listParts();
+                        StringBuilder sb = new StringBuilder();
+                        for (Part part : optionalParts.orElse(Collections.emptyList())) {
                             sb.append(part.toString()).append("\n");
                         }
                         System.out.println(sb);
@@ -51,18 +49,20 @@ public class ClientMain {
                     case "getp":
                         System.out.print("Insira o id que deseja buscar: ");
 
+                        UUID searchId;
                         try {
-                            UUID searchId = UUID.fromString(sc.nextLine());
-                            Part part = controller.findPart(searchId);
-                            if (part == null) {
-                                System.out.println("Part inexistente");
-                            } else {
-                                controller.setCurrentPart(part);
-                                System.out.println("Part encontrada: " + part);
-                            }
+                            searchId = UUID.fromString(sc.nextLine());
+                        } catch (Exception e) {
+                            System.out.println("input invalido, retornando...");
+                            break;
                         }
-                        catch(Exception e){
-                            System.out.println("Input invalido");
+
+                        Optional<Part> optionalPart = controller.findPart(searchId);
+                        if (!optionalPart.isPresent()) {
+                            System.out.println("Part inexistente");
+                        } else {
+                            controller.setCurrentPart(optionalPart.get());
+                            System.out.println("Part encontrada: " + optionalPart);
                         }
                         break;
 
@@ -94,15 +94,18 @@ public class ClientMain {
 
                     case "showp":
 
-                        Part part = controller.getCurrentPart();
+                        Optional<Part> optionalCurrentPart = controller.getCurrentPart();
 
-                        System.out.println(part);
+                        System.out.println(optionalCurrentPart);
                         System.out.println("Subparts: ");
 
-                        for(UUID id : part.getSubcomponents().keySet()){
-                            System.out.println(controller.findPart(id) + " quantity=" + part.getSubcomponents().get(id));
+                        if (optionalCurrentPart.isPresent()) {
+                            for(UUID id : optionalCurrentPart.get().getSubcomponents().keySet()){
+                                System.out.println(controller.findPart(id) + " quantity=" + optionalCurrentPart.getSubcomponents().get(id));
+                            }
+                        } else {
+                            System.out.println("Part nao encontrada");
                         }
-
                         break;
 
                     case "clearlist":
