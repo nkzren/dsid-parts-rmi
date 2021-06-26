@@ -52,16 +52,13 @@ public class CommandController {
         } catch (IllegalArgumentException e) {
             System.out.println("O nome e a descricao nao podem ser vazios");
             e.printStackTrace();
+            return Optional.empty();
         } catch (RemoteException e) {
             System.out.println("Erro de conexao com o servidor");
             return Optional.empty();
         }
 
-        if (newPart != null) {
-            return Optional.of(newPart);
-        } else {
-            return Optional.empty();
-        }
+        return Optional.of(newPart);
     }
 
     public void addSubpartCommand(int quant) {
