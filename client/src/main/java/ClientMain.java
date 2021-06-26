@@ -72,7 +72,10 @@ public class ClientMain {
                         int quant = Integer.parseInt(sc.nextLine());
 
                         controller.addSubpartCommand(quant);
-                        System.out.println(controller.getCurrentSubParts().get(controller.getCurrentPart().getId()));
+                        if (controller.getCurrentPart().isPresent()) {
+                            UUID currentPartId = controller.getCurrentPart().get().getId();
+                            System.out.println(controller.getCurrentSubParts().get(currentPartId));
+                        }
                         break;
 
                     case "bind":
