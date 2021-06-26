@@ -41,6 +41,12 @@ public class PartRepositoryImpl extends UnicastRemoteObject implements PartRepos
     }
 
     @Override
+    public void addSubpart(Part part, Part subpart, int quant) throws RemoteException {
+
+        getPart(part.getId()).addSubcomponents(subpart, quant);
+    }
+
+    @Override
     public Part getPart(UUID partId) throws RemoteException {
         return partMap.get(partId);
     }

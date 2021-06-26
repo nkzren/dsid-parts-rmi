@@ -7,7 +7,7 @@ import java.rmi.registry.Registry;
 public class Main {
     private static Registry registry;
 
-    public static void main (String args [ ]) {
+    public static void main (String args []) {
         try {
             int port = Integer.parseInt(args[1]); // 10020
             LocateRegistry.createRegistry(port);

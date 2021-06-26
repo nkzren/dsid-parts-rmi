@@ -26,7 +26,7 @@ public class ClientMain {
 
             CommandController controller = new CommandController(sc, serverName.toString());
 
-            String options = "bind | listp | getp | showp | clearlist | addsubpart | addp | quit";
+            String options = "\nbind | listp | getp | showp | clearlist | addsubpart | addp | quit";
 
             System.out.println("Conectado ao servidor " + inputName + ". Digite uma das opcoes abaixo:");
             System.out.println(options);
@@ -50,33 +50,28 @@ public class ClientMain {
 
                     case "getp":
                         System.out.print("Insira o id que deseja buscar: ");
-                        UUID searchId = UUID.fromString(sc.nextLine());
-                        Part part = controller.findPart(searchId);
-                        if (part == null) {
-                            System.out.println("Part inexistente");
+
+                        try {
+                            UUID searchId = UUID.fromString(sc.nextLine());
+                            Part part = controller.findPart(searchId);
+                            if (part == null) {
+                                System.out.println("Part inexistente");
+                            } else {
+                                System.out.println("Part encontrada: " + part);
+                            }
                         }
-                        else {
-                            System.out.println("Part encontrada: " + part);
+                        catch(Exception e){
+                            System.out.println("Input invalido");
                         }
                         break;
 
                     case "addsubpart":
 
-//                        parts = controller.listParts();
-//                        sb = new StringBuilder("");
-//
-//                        for (Part p : parts) {
-//                            sb.append("{Nome='").append(p.getName()).append("', id=").append(p.getId()).append("}\n");
-//                        }
-//                        System.out.println(sb);
-
-                        //System.out.println("Insira o id da part que deseja receber uma subpart: ");
-                        //UUID partId = UUID.fromString(sc.nextLine());
-
                         System.out.println("Digite a quantidade de unidades da peca corrente: ");
                         int quant = Integer.parseInt(sc.nextLine());
 
                         controller.addSubpartCommand(quant);
+                        System.out.println(controller.getCurrentSubParts().get(controller.getCurrentPart().getId()));
                         break;
 
                     case "bind":
@@ -98,9 +93,31 @@ public class ClientMain {
 
                     case "showp":
                         System.out.println(controller.getCurrentPart());
+                        System.out.println("Subparts: ");
+
+                        System.out.println(controller.getCurrentPart().getSubcomponents().size());
+
+                        for(UUID id : controller.getCurrentPart().getSubcomponents().keySet()){
+                            System.out.println(controller.findPart(id) + " Quantidade=" + controller.getCurrentPart().getSubcomponents().get(id));
+                        }
+
+                        System.out.println(controller.getCurrentPart().getSubcomponents());
+
+                        break;
 
                     case "clearlist":
+                        System.out.println("Limpando lista");
                         controller.clearListCommand();
+                        break;
+
+                    case "subp":
+                        for(UUID id : controller.getCurrentSubParts().keySet()){
+                            System.out.println(controller.findPart(id));
+                        }
+                        break;
+
+                    default:
+                        System.out.println("Comando invalido");
                 }
 
                 System.out.println(options);

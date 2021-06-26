@@ -13,7 +13,7 @@ public class CommandController {
 
     Scanner sc;
     PartRepository repository;
-    Part currentPart;
+    private Part currentPart;
     Map<UUID, Integer> currentSubParts;
 
     public CommandController(Scanner sc, String serverName) throws Exception {
@@ -36,52 +36,25 @@ public class CommandController {
             if (name.isEmpty() || description.isEmpty()) {
                 throw new IllegalArgumentException();
             }
+
             newPart = this.repository.addPart(name, description);
 
+            System.out.println("id=" + newPart.getId());
+
             for (UUID partId : currentSubParts.keySet()) {
-                newPart.addSubcomponents(findPart(partId), currentSubParts.get(partId));
+                repository.addSubpart(newPart, findPart(partId), currentSubParts.get(partId));
             }
 
-//            System.out.println("Deseja adicionar subpart? [s/n]");
-//            String option = sc.nextLine();
-//
-//            if(option.equals("s")) {
-//                addSubpartCommand(newPart);
-//            }
+            if(this.currentPart == null)
+                this.currentPart = newPart;
         }
         catch (IllegalArgumentException e) {
             System.out.println("O nome e a descricao nao podem ser vazios");
             e.printStackTrace();
         }
 
-        if(this.currentPart == null)
-            this.currentPart = newPart;
-
         return newPart;
     }
-
-//    public void addSubpartCommand(Part part, int quant) throws RemoteException {
-
-//        System.out.println("Essa subpart ja existe? [s/n]");
-//        String option = sc.nextLine();
-
-//        UUID subId;
-
-//        if (option.equals("n")) {
-//            Part newSubpart = newPartCommand();
-//            subId = newSubpart.getId();
-//        } else {
-//            System.out.print("Insira o ID da parte que deseja adicionar: ");
-//            subId = UUID.fromString(sc.nextLine());
-//        }
-
-//        part.addSubcomponents(findPart(subId), quant);
-//    }
-
-//    public void addSubpartCommand(UUID partId, int quant) throws RemoteException {
-//
-//        addSubpartCommand(findPart(partId), quant);
-//    }
 
     public void addSubpartCommand(int quant) throws RemoteException {
 
@@ -116,6 +89,11 @@ public class CommandController {
     public Part getCurrentPart() {
 
         return this.currentPart;
+    }
+
+    public Map<UUID, Integer> getCurrentSubParts() {
+
+        return currentSubParts;
     }
 
     public void clearListCommand() {
